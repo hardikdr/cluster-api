@@ -14,16 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-
 package v1alpha1
 
 import (
-	corev1 "k8s.io/api/core/v1"
-	"k8s.io/apimachinery/pkg/runtime"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/runtime"
 )
 
 // +genclient
+// +genclient:noStatus
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 // MachineClass can be used to templatize and re-use provider configuration
@@ -31,7 +30,7 @@ import (
 // +k8s:openapi-gen=true
 // +resource:path=machineclasses
 type MachineClass struct {
-	metav1.TypeMeta   `json:",inline"`
+	metav1.TypeMeta `json:",inline"`
 	// +optional
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
@@ -41,7 +40,8 @@ type MachineClass struct {
 	// this field is consistent with the underlying machine that will
 	// be provisioned when this class is used, to inform higher level
 	// automation (e.g. the cluster autoscaler).
-	Capacity    corev1.ResourceList `json:"capacity"`
+	// TODO(hardikdr) Add allocatable field once requirements are clear from autoscaler-clusterapi // integration topic.
+	// Capacity corev1.ResourceList `json:"capacity"`
 
 	// How much capacity is actually allocatable on this machine.
 	// Must be equal to or less than the capacity, and when less
@@ -51,7 +51,8 @@ type MachineClass struct {
 	// this field is consistent with the underlying machine that will
 	// be provisioned when this class is used, to inform higher level
 	// automation (e.g. the cluster autoscaler).
-	Allocatable corev1.ResourceList `json:"allocatable"`
+	// TODO(hardikdr) Add allocatable field once requirements are clear from autoscaler-clusterapi // integration topic.
+	// Allocatable corev1.ResourceList `json:"allocatable"`
 
 	// Provider-specific configuration to use during node creation.
 	ProviderConfig runtime.RawExtension `json:"providerConfig"`
@@ -60,4 +61,15 @@ type MachineClass struct {
 	// A link to the MachineTemplate that will be used to create provider
 	// specific configuration for Machines of this class.
 	// MachineTemplate corev1.ObjectReference `json:machineTemplate`
+
+	// TODO(roberthbailey): Remove the Spec and Status once apiregister-gen
+	// supports code-generation for types which do not have a spec or status.
+	Spec   MachineClassSpec   `json:"spec,omitempty"`
+	Status MachineClassStatus `json:"status,omitempty"`
 }
+
+// TODO(roberthbailey): Remove this struct. It is only needed to make code-gen happy.
+type MachineClassSpec struct{}
+
+// TODO(roberthbailey): Remove this struct. It is only needed to make code-gen happy.
+type MachineClassStatus struct{}
