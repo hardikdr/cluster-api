@@ -41,3 +41,20 @@ type ProviderConfig struct {
 type ProviderConfigSource struct {
 	// TODO(roberthbailey): Fill these in later
 }
+
+// MachineSummary store the summary of machine.
+type MachineSummary struct {
+	// Name of the machine object
+	Name string `json:"name,omitempty" protobuf:"bytes,1,opt,name=name"`
+
+	// ProviderID represents the provider's unique ID given to a machine
+	ProviderID string `json:"providerID,omitempty"`
+
+	// Last operation refers to the status of the last operation performed
+	//TODO: Add Lastoperation field from MachineState-story
+
+	//LastOperation LastOperation `json:"lastOperation,omitempty"`
+
+	// OwnerRef
+	OwnerRef string `json:"ownerRef,omitempty"`
+}

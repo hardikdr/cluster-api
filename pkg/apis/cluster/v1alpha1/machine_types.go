@@ -144,6 +144,10 @@ type MachineStatus struct {
 	// Refer: https://kubernetes.io/docs/concepts/architecture/nodes/#condition
 	// +optional
 	Conditions []corev1.NodeCondition `json:"conditions,omitempty"`
+
+	// ProviderID represents the provider's unique ID given to a machine
+	// +optional
+	ProviderID string `json:"providerID,omitempty"`
 }
 
 type MachineVersionInfo struct {
