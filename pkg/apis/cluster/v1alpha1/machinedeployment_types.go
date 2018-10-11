@@ -59,6 +59,10 @@ type MachineDeploymentSpec struct {
 	// +optional
 	Paused bool `json:"paused,omitempty"`
 
+	// The config this MachineDeployment is rolling back to. Will be cleared after rollback is done.
+	// +optional
+	RollbackTo *RollbackConfig `json:"rollbackTo,omitempty"`
+
 	// The maximum time in seconds for a deployment to make progress before it
 	// is considered to be failed. The deployment controller will continue to
 	// process failed deployments and a condition with a ProgressDeadlineExceeded
@@ -80,6 +84,12 @@ type MachineDeploymentStrategy struct {
 	// MachineDeploymentStrategyType = RollingUpdate.
 	// +optional
 	RollingUpdate *MachineRollingUpdateDeployment `json:"rollingUpdate,omitempty"`
+}
+
+type RollbackConfig struct {
+	// The revision to rollback to. If set to 0, rollback to the last revision.
+	// +optional
+	Revision int64 `json:"revision,omitempty"`
 }
 
 // Spec to control the desired behavior of rolling update.
@@ -148,6 +158,36 @@ type MachineDeploymentStatus struct {
 	// that still have not been created.
 	// +optional
 	UnavailableReplicas int32 `json:"unavailableReplicas,omitempty" protobuf:"varint,5,opt,name=unavailableReplicas"`
+
+	// Represents the latest available observations of a MachineDeployment's current state.
+	// +patchMergeKey=type
+	// +patchStrategy=merge
+	Conditions []MachineDeploymentCondition `json:"conditions,omitempty" patchStrategy:"merge" patchMergeKey:"type" protobuf:"bytes,6,rep,name=conditions"`
+
+	// FailedMachines has summary of machines on which lastOperation Failed
+	// +optional
+	FailedMachines []*MachineSummary `json:"failedMachines,omitempty" protobuf:"bytes,9,rep,name=failedMachines"`
+}
+
+// MachineDeploymentCondition describes the state of a MachineDeployment at a certain point.
+type MachineDeploymentCondition struct {
+	// Type of MachineDeployment condition.
+	Type common.MachineDeploymentConditionType `json:"type" protobuf:"bytes,1,opt,name=type,casttype=MachineDeploymentConditionType"`
+
+	// Status of the condition, one of True, False, Unknown.
+	Status common.ConditionStatus `json:"status" protobuf:"bytes,2,opt,name=status,casttype=corev1.ConditionStatus"`
+
+	// The last time this condition was updated.
+	LastUpdateTime metav1.Time `json:"lastUpdateTime,omitempty" protobuf:"bytes,6,opt,name=lastUpdateTime"`
+
+	// Last time the condition transitioned from one status to another.
+	LastTransitionTime metav1.Time `json:"lastTransitionTime,omitempty" protobuf:"bytes,7,opt,name=lastTransitionTime"`
+
+	// The reason for the condition's last transition.
+	Reason string `json:"reason,omitempty" protobuf:"bytes,4,opt,name=reason"`
+
+	// A human readable message indicating details about the transition.
+	Message string `json:"message,omitempty" protobuf:"bytes,5,opt,name=message"`
 }
 
 // +genclient

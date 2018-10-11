@@ -99,6 +99,9 @@ const (
 type MachineDeploymentStrategyType string
 
 const (
+	// Kill all existing machines before creating new ones.
+	RecreateMachineDeploymentStrategyType MachineDeploymentStrategyType = "Recreate"
+
 	// Replace the old MachineSet by new one using rolling update
 	// i.e gradually scale down the old MachineSet and scale up the new one.
 	RollingUpdateMachineDeploymentStrategyType MachineDeploymentStrategyType = "RollingUpdate"
@@ -158,4 +161,38 @@ const (
 
 	// MachineOperationStateSuccessful should be set when last operation was successfully completed.
 	MachineOperationStateSuccessful MachineOperationState = "Successful"
+)
+
+type MachineDeploymentConditionType string
+
+// These are valid conditions of a MachineDeployment.
+const (
+	// Available means the MachineDeployment is available, ie. at least the minimum available
+	// replicas required are up and running for at least minReadySeconds.
+	MachineDeploymentAvailable MachineDeploymentConditionType = "Available"
+
+	// Progressing means the MachineDeployment is progressing. Progress for a MachineDeployment is
+	// considered when a new machine set is created or adopted, and when new machines scale
+	// up or old machines scale down. Progress is not estimated for paused MachineDeployments or
+	// when progressDeadlineSeconds is not specified.
+	MachineDeploymentProgressing MachineDeploymentConditionType = "Progressing"
+
+	// ReplicaFailure is added in a MachineDeployment when one of its machines fails to be created
+	// or deleted.
+	MachineDeploymentReplicaFailure MachineDeploymentConditionType = "ReplicaFailure"
+
+	// MachineDeploymentFrozen is added in a MachineDeployment when user dont want any actions to be taken for this Machinedeployment
+	MachineDeploymentFrozen MachineDeploymentConditionType = "Frozen"
+)
+
+type ConditionStatus string
+
+// These are valid condition statuses. "ConditionTrue" means a resource is in the condition;
+// "ConditionFalse" means a resource is not in the condition; "ConditionUnknown" means kubernetes
+// can't decide if a resource is in the condition or not. In the future, we could add other
+// intermediate conditions, e.g. ConditionDegraded.
+const (
+	ConditionTrue    ConditionStatus = "True"
+	ConditionFalse   ConditionStatus = "False"
+	ConditionUnknown ConditionStatus = "Unknown"
 )

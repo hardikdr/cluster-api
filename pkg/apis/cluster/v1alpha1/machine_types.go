@@ -145,6 +145,10 @@ type MachineStatus struct {
 	// +optional
 	Conditions []corev1.NodeCondition `json:"conditions,omitempty"`
 
+	// ProviderID represents the provider's unique ID given to a machine
+	// +optional
+	ProviderID string `json:"providerID,omitempty"`
+
 	// LastOperation describes the last-operation performed by the machine-controller.
 	// This API should be useful as a history in terms of the latest operation performed on the
 	// specific machine. It should also convey the state of the latest-operation for example if // it is still on-going, failed or completed successfully.
