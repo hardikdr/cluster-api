@@ -38,6 +38,12 @@ spec:
             revisionHistoryLimit:
               format: int32
               type: integer
+            rollbackTo:
+              properties:
+                revision:
+                  format: int64
+                  type: integer
+              type: object
             selector:
               type: object
             strategy:
@@ -95,6 +101,51 @@ spec:
             availableReplicas:
               format: int32
               type: integer
+            conditions:
+              items:
+                properties:
+                  lastTransitionTime:
+                    format: date-time
+                    type: string
+                  lastUpdateTime:
+                    format: date-time
+                    type: string
+                  message:
+                    type: string
+                  reason:
+                    type: string
+                  status:
+                    type: string
+                  type:
+                    type: string
+                required:
+                - type
+                - status
+                type: object
+              type: array
+            failedMachines:
+              items:
+                properties:
+                  lastOperation:
+                    properties:
+                      description:
+                        type: string
+                      lastUpdateTime:
+                        format: date-time
+                        type: string
+                      state:
+                        type: string
+                      type:
+                        type: string
+                    type: object
+                  name:
+                    type: string
+                  ownerRef:
+                    type: string
+                  providerID:
+                    type: string
+                type: object
+              type: array
             observedGeneration:
               format: int64
               type: integer
