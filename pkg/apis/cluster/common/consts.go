@@ -103,3 +103,59 @@ const (
 	// i.e gradually scale down the old MachineSet and scale up the new one.
 	RollingUpdateMachineDeploymentStrategyType MachineDeploymentStrategyType = "RollingUpdate"
 )
+
+// MachinePhase is the ongoing-phase machine is going through at the moment.
+type MachinePhase string
+
+// These are the valid values for the MachinePhase.
+const (
+	// MachinePending should be set when machine is being created but it has not joined the
+	// cluster yet.
+	MachinePending MachinePhase = "Pending"
+
+	// MachineRunning should be set when machine has joined the cluster and running successfully.
+	MachineRunning MachinePhase = "Running"
+
+	// MachineTerminating should be set when machine is being deleted.
+	MachineTerminating MachinePhase = "Terminating"
+
+	// MachineUnknown should be set when there is no way for controller to understand the
+	// current phase of the machine. For example when is not reachable due to network-issues.
+	MachineUnknown MachinePhase = "Unknown"
+
+	// MachineFailed should be set when machine has failed and certain action needs to be taken either by higher-level controller or an admin.
+	MachineFailed MachinePhase = "Failed"
+)
+
+// MachineOperationType is the type of the last operation performed on the Machine.
+type MachineOperationType string
+
+// These are valid values for MachineOperationType.
+const (
+	// MachineOperationCreate should be set when last operation was Create.
+	MachineOperationCreate MachineOperationType = "Create"
+
+	// MachineOperationUpdate should be set when last operation was Update.
+	MachineOperationUpdate MachineOperationType = "Update"
+
+	// MachineOperationHealthCheck should be set when last operation was HealthCheck.
+	MachineOperationHealthCheck MachineOperationType = "HealthCheck"
+
+	// MachineOperationDelete should be set when last operation was Delete.
+	MachineOperationDelete MachineOperationType = "Delete"
+)
+
+// MachineOperationState is the current status of the last performed operation.
+type MachineOperationState string
+
+// These are the valid values for MachineOperationState.
+const (
+	// MachineOperationStateProcessing should be set when last operation is ongoing.
+	MachineOperationStateProcessing MachineOperationState = "Processing"
+
+	// MachineOperationStateFailed should be set when last operation has failed with certain error.
+	MachineOperationStateFailed MachineOperationState = "Failed"
+
+	// MachineOperationStateSuccessful should be set when last operation was successfully completed.
+	MachineOperationStateSuccessful MachineOperationState = "Successful"
+)
