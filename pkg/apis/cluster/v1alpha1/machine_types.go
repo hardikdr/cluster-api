@@ -148,6 +148,31 @@ type MachineStatus struct {
 	// ProviderID represents the provider's unique ID given to a machine
 	// +optional
 	ProviderID string `json:"providerID,omitempty"`
+
+	// LastOperation describes the last-operation performed by the machine-controller.
+	// This API should be useful as a history in terms of the latest operation performed on the
+	// specific machine. It should also convey the state of the latest-operation for example if // it is still on-going, failed or completed successfully.
+	LastOperation LastOperation `json:"lastOperation,omitempty"`
+
+	// Phase represents an ongoing-phase a machine is going through. It is expected to be
+	// transient. Higher-level controllers should rely on MachinePhases to take the right
+	// decision such as replacing the Failed machines.
+	Phase common.MachinePhase `json:"phase,omitempty"`
+}
+
+// LastOperation represents the detail of the last performed operation on the MachineObject.
+type LastOperation struct {
+	// Description is the human-readable description of the last operation.
+	Description string `json:"description,omitempty"`
+
+	// LastUpdateTime is the timestamp at which LastOperation API was last-updated.
+	LastUpdateTime metav1.Time `json:"lastUpdateTime,omitempty"`
+
+	// State is the current status of the last performed operation.
+	State common.MachineOperationState `json:"state,omitempty"`
+
+	// Type is the type of operation which was last performed.
+	Type common.MachineOperationType `json:"type,omitempty"`
 }
 
 type MachineVersionInfo struct {
